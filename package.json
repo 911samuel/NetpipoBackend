@@ -1,7 +1,7 @@
 {
   "name": "my-express-app",
   "version": "1.0.0",
-  "description": "my brand backend implementation",
+  "description": "NETPIPO BACKEND IMPLEMENTATION",
   "main": "index.js",
   "scripts": {
     "dev:watch": "nodemon ./src/index.ts",

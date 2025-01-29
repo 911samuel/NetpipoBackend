@@ -1,12 +1,12 @@
-import express from 'express';
-import { add, update, delete1, deleteAll } from '../controllers/comments';
-import isUser from '../middlewares/isUser';
+import express from "express";
+import { add, update, delete1, deleteAll } from "../controllers/comments";
+import isemployee from "../middlewares/isemployee";
 
 const router = express.Router();
 
-router.post('/add/:id', isUser, add);
-router.put('/update/:id', isUser, update);
-router.delete('/delete/:id', isUser, delete1);
-router.delete('/deleteAll', isUser, deleteAll)
+router.post("/add/:id", isemployee, add);
+router.put("/update/:id", isemployee, update);
+router.delete("/delete/:id", isemployee, delete1);
+router.delete("/deleteAll", isemployee, deleteAll);
 
 export default router;

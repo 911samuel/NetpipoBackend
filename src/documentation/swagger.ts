@@ -3,7 +3,7 @@ import swaggerAutogen from "swagger-autogen";
 const apiDoc = {
   openapi: "3.0.0",
   info: {
-    title: "MY BRAND API DOCUMENTATION",
+    title: "NETPIPO BACKEND API DOCUMENTATION",
     description: "Documentation for the Express API endpoints",
     version: "1.0.0",
   },

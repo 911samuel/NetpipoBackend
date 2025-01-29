@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "MY BRAND API DOCUMENTATION",
+    "title": "NETPIPO BACKEND API DOCUMENTATION",
     "description": "Documentation for the Express API endpoints",
     "version": "1.0.0"
   },
@@ -11,11 +11,9 @@
     }
   ],
   "paths": {
-    "/users/signUp": {
+    "/employees/signUp": {
       "post": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "responses": {
           "200": {
@@ -37,7 +35,7 @@
                   "lastname": {
                     "example": "any"
                   },
-                  "username": {
+                  "employeename": {
                     "example": "any"
                   },
                   "email": {
@@ -53,11 +51,9 @@
         }
       }
     },
-    "/users/signIn": {
+    "/employees/signIn": {
       "post": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "responses": {
           "200": {
@@ -86,11 +82,9 @@
         }
       }
     },
-    "/users/all": {
+    "/employees/all": {
       "get": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "responses": {
           "200": {
@@ -102,11 +96,9 @@
         }
       }
     },
-    "/users/single/{id}": {
+    "/employees/single/{id}": {
       "get": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "parameters": [
           {
@@ -128,11 +120,9 @@
         }
       }
     },
-    "/users/update/{id}": {
+    "/employees/update/{id}": {
       "put": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "parameters": [
           {
@@ -167,7 +157,7 @@
                   "lastname": {
                     "example": "any"
                   },
-                  "username": {
+                  "employeename": {
                     "example": "any"
                   },
                   "email": {
@@ -183,11 +173,9 @@
         }
       }
     },
-    "/users/delete/{id}": {
+    "/employees/delete/{id}": {
       "delete": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "parameters": [
           {
@@ -209,11 +197,9 @@
         }
       }
     },
-    "/users/deleteAll": {
+    "/employees/deleteAll": {
       "delete": {
-        "tags": [
-          "USER"
-        ],
+        "tags": ["employee"],
         "description": "",
         "responses": {
           "200": {
@@ -224,9 +210,7 @@
     },
     "/blogs/all": {
       "get": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "responses": {
           "200": {
@@ -240,9 +224,7 @@
     },
     "/blogs/single/{id}": {
       "get": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "parameters": [
           {
@@ -266,9 +248,7 @@
     },
     "/blogs/create": {
       "post": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "responses": {
           "201": {
@@ -305,9 +285,7 @@
     },
     "/blogs/update/{id}": {
       "put": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "parameters": [
           {
@@ -357,9 +335,7 @@
     },
     "/blogs/delete/{id}": {
       "delete": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "parameters": [
           {
@@ -383,9 +359,7 @@
     },
     "/blogs/deleteAll": {
       "delete": {
-        "tags": [
-          "BLOG"
-        ],
+        "tags": ["BLOG"],
         "description": "",
         "responses": {
           "200": {
@@ -396,9 +370,7 @@
     },
     "/comments/add/{id}": {
       "post": {
-        "tags": [
-          "COMMENT"
-        ],
+        "tags": ["COMMENT"],
         "description": "",
         "parameters": [
           {
@@ -442,9 +414,7 @@
     },
     "/comments/update/{id}": {
       "put": {
-        "tags": [
-          "COMMENT"
-        ],
+        "tags": ["COMMENT"],
         "description": "",
         "parameters": [
           {
@@ -488,9 +458,7 @@
     },
     "/comments/delete/{id}": {
       "delete": {
-        "tags": [
-          "COMMENT"
-        ],
+        "tags": ["COMMENT"],
         "description": "",
         "parameters": [
           {
@@ -517,9 +485,7 @@
     },
     "/comments/deleteAll": {
       "delete": {
-        "tags": [
-          "COMMENT"
-        ],
+        "tags": ["COMMENT"],
         "description": "",
         "responses": {
           "200": {

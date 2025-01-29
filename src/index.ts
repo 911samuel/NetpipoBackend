@@ -6,12 +6,12 @@ import swaggerOutPut from "./documentation/swagger_output.json";
 import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
-import fs  from 'fs';
+import fs from "fs";
 
 require("dotenv").config();
 
 import blog from "./routes/blogs";
-import user from "./routes/users";
+import employee from "./routes/employees";
 import comment from "./routes/comments";
 
 const db = process.env.BACKEND_MONGODB_URI;
@@ -32,9 +32,9 @@ if (!db) {
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors()); 
+app.use(cors());
 
-app.use(bodyParser.json({ limit: "50mb" })); 
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const uploadDir = path.join(__dirname, "../uploads/");
@@ -45,10 +45,10 @@ if (!fs.existsSync(uploadDir)) {
 app.use("/uploads", express.static(uploadDir));
 
 app.use(
-  "/users",
-  user
+  "/employees",
+  employee
   /* 
-#swagger.tags = ['USER']
+#swagger.tags = ['EMPLOYEE']
 */
 );
 app.use(

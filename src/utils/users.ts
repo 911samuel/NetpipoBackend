@@ -1,30 +1,33 @@
 import { z, ZodError } from "zod";
 import { hash } from "bcryptjs";
-import { IUser } from "../models/users";
+import { Iemployee } from "../models/employees";
 
-const userZodSchema = z.object({
+const employeeZodSchema = z.object({
   firstname: z.string().min(1, { message: "First name is required" }),
   lastname: z.string().min(1, { message: "Last name is required" }),
-  username: z.string().min(1, { message: "Username is required" }),
+  employeename: z.string().min(1, { message: "employeename is required" }),
   email: z
     .string()
     .min(1, { message: "Email is required" })
     .email({ message: "Invalid email format" }),
   password: z
     .string()
-    .min(1,  { message: "Password is required" })
+    .min(1, { message: "Password is required" })
     .min(6, { message: "Password must be at least 6 characters long" })
-    .max(20,  { message: "Password cannot exceed 20 characters" }),
-  role: z.string().min(3).default("USER"),
+    .max(20, { message: "Password cannot exceed 20 characters" }),
+  role: z.string().min(3).default("employee"),
 });
 
-const updateUserSchema = z.object({
+const updateemployeeSchema = z.object({
   firstname: z
     .string()
     .min(1, { message: "First name is required" })
     .optional(),
   lastname: z.string().min(1, { message: "Last name is required" }).optional(),
-  username: z.string().min(1, { message: "Username is required" }).optional(),
+  employeename: z
+    .string()
+    .min(1, { message: "employeename is required" })
+    .optional(),
   email: z
     .string()
     .min(1, { message: "Email is required" })
@@ -32,20 +35,22 @@ const updateUserSchema = z.object({
     .optional(),
   password: z
     .string()
-    .min(1,  { message: "Password is required" })
+    .min(1, { message: "Password is required" })
     .min(6, { message: "Password must be at least 6 characters long" })
-    .max(20,  { message: "Password cannot exceed 20 characters" })
+    .max(20, { message: "Password cannot exceed 20 characters" })
     .optional(),
   role: z.string().min(3).optional(),
 });
 
-interface ValidatedUser extends Omit<IUser, "password"> {}
+interface Validatedemployee extends Omit<Iemployee, "password"> {}
 
-const validateUser = async (
-  userData: any
-): Promise<ValidatedUser | { validationErrors: Record<string, string> }> => {
+const validateemployee = async (
+  employeeData: any
+): Promise<
+  Validatedemployee | { validationErrors: Record<string, string> }
+> => {
   try {
-    const validatedData: any = userZodSchema.parse(userData);
+    const validatedData: any = employeeZodSchema.parse(employeeData);
 
     if (validatedData.password) {
       const hashedPassword = await hash(validatedData.password, 10);
@@ -55,7 +60,6 @@ const validateUser = async (
     return validatedData;
   } catch (error) {
     if (error instanceof ZodError) {
-
       const validationError = error.errors[0];
       const errorMessage = validationError.message;
 
@@ -69,11 +73,13 @@ const validateUser = async (
   }
 };
 
-const validateupdatedUser = async (
-  userData: any
-): Promise<ValidatedUser | { validationErrors: Record<string, string> }> => {
+const validateupdatedemployee = async (
+  employeeData: any
+): Promise<
+  Validatedemployee | { validationErrors: Record<string, string> }
+> => {
   try {
-    const validatedData: any = updateUserSchema.parse(userData);
+    const validatedData: any = updateemployeeSchema.parse(employeeData);
 
     if (validatedData.password) {
       const hashedPassword = await hash(validatedData.password, 10);
@@ -83,8 +89,7 @@ const validateupdatedUser = async (
     return validatedData;
   } catch (error) {
     if (error instanceof ZodError) {
-
-      const validationError = error.errors[0]; 
+      const validationError = error.errors[0];
       const fieldName = validationError.path[0];
       const errorMessage = validationError.message;
 
@@ -98,4 +103,4 @@ const validateupdatedUser = async (
   }
 };
 
-export { validateUser, validateupdatedUser };
+export { validateemployee, validateupdatedemployee };

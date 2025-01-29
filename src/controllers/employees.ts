@@ -1,42 +1,33 @@
-"use strict";
-var __importDefault =
-  (this && this.__importDefault) ||
-  function (mod) {
-    return mod && mod.__esModule ? mod : { default: mod };
-  };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAll =
-  exports.delete1 =
-  exports.update =
-  exports.all =
-  exports.single =
-  exports.signIn =
-  exports.signUp =
-    void 0;
-const employees_1 = require("../utils/employees");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const employees_2 = __importDefault(require("../models/employees"));
+import { Request, Response, NextFunction } from "express";
+import { validateemployee, validateupdatedemployee } from "../utils/employees";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import employee, { Iemployee } from "../models/employees";
+
 require("dotenv").config({ path: ".env" });
-const signUp = async (req, res, next) => {
+
+const signUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { firstname, lastname, employeename, email, password } = req.body;
-    const existingemployeename = await employees_2.default.findOne({
-      employeename,
-    });
+
+    const existingemployeename = await employee.findOne({ employeename });
     if (existingemployeename) {
       return res.status(400).json({ message: "employeename is already taken" });
     }
-    const existingEmail = await employees_2.default.findOne({ email });
+
+    const existingEmail = await employee.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ message: "Email is already registered" });
     }
-    const validatedemployee = await (0, employees_1.validateemployee)(req.body);
+
+    const validatedemployee = await validateemployee(req.body);
     if ("validationErrors" in validatedemployee) {
       return res.status(400).json(validatedemployee.validationErrors);
     }
-    const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-    const newemployee = new employees_2.default({
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newemployee: Iemployee = new employee({
       firstname,
       lastname,
       employeename,
@@ -44,19 +35,24 @@ const signUp = async (req, res, next) => {
       password: hashedPassword,
       role: email === "abayizeraeaz@gmail.com" ? "admin" : "employee",
     });
+
     const savedemployee = await newemployee.save();
-    const token = jsonwebtoken_1.default.sign(
+
+    const token = jwt.sign(
       { _id: savedemployee._id },
       process.env.LOGIN_SECRET || "I0H1A9G2sam",
       { expiresIn: "1d" }
     );
+
     if (!token) {
       throw new Error("Failed to generate token");
     }
-    const employeeWithoutPassword = Object.assign(
-      Object.assign({}, savedemployee.toObject()),
-      { password: undefined }
-    );
+
+    const employeeWithoutPassword = {
+      ...savedemployee.toObject(),
+      password: undefined,
+    };
+
     return res.status(200).json({
       message: "Registration successful",
       token,
@@ -67,14 +63,11 @@ const signUp = async (req, res, next) => {
     next(error);
   }
 };
-exports.signUp = signUp;
-const all = async (req, res, next) => {
+
+const all = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const employees = await employees_2.default.find();
-    const employeeWithoutPassword = Object.assign(
-      Object.assign({}, employees),
-      { password: undefined }
-    );
+    const employees = await employee.find();
+    const employeeWithoutPassword = { ...employees, password: undefined };
     return res.json({ employeeWithoutPassword });
   } catch (error) {
     console.error("Error fetching employees:", error);
@@ -84,50 +77,55 @@ const all = async (req, res, next) => {
     });
   }
 };
-exports.all = all;
-const single = async (req, res, next) => {
+
+const single = async (req: Request, res: Response, next: NextFunction) => {
   const employeeId = req.params.id;
   try {
-    const employee = await employees_2.default.findById(employeeId);
+    const employee = await employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({ message: "employee not found" });
     }
-    const employeeWithoutPassword = Object.assign(Object.assign({}, employee), {
-      password: undefined,
-    });
+
+    const employeeWithoutPassword = { ...employee, password: undefined };
+
     return res.json({ employeeWithoutPassword });
   } catch (error) {
     console.error("Error fetching employee:", error);
     next(error);
   }
 };
-exports.single = single;
-const signIn = async (req, res, next) => {
+
+const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
-    const employee = await employees_2.default.findOne({ email });
+
+    const employee = await employee.findOne({ email });
+
     if (!employee) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-    const isValidPassword = await bcryptjs_1.default.compare(
-      password,
-      employee.password
-    );
+
+    const isValidPassword = await bcrypt.compare(password, employee.password);
+
     if (!isValidPassword) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-    const token = jsonwebtoken_1.default.sign(
+
+    const token = jwt.sign(
       { _id: employee._id },
       process.env.LOGIN_SECRET || "I0H1A9G2sam",
       { expiresIn: "1d" }
     );
+
     if (!token) {
       throw new Error("Failed to generate token");
     }
-    const employeeWithoutPassword = Object.assign(
-      Object.assign({}, employee.toObject()),
-      { password: undefined }
-    );
+
+    const employeeWithoutPassword = {
+      ...employee.toObject(),
+      password: undefined,
+    };
+
     return res.status(200).json({
       message: "Login successful",
       token,
@@ -137,39 +135,47 @@ const signIn = async (req, res, next) => {
     next(error);
   }
 };
-exports.signIn = signIn;
-const update = async (req, res, next) => {
+
+const update = async (req: Request, res: Response, next: NextFunction) => {
   const employeeId = req.params.id;
+
   try {
-    const validatedUpdatedemployee = await (0,
-    employees_1.validateupdatedemployee)(req.body);
+    const validatedUpdatedemployee = await validateupdatedemployee(req.body);
+
     if ("validationErrors" in validatedUpdatedemployee) {
       return res.status(400).json(validatedUpdatedemployee);
     }
+
     const { firstname, lastname, employeename, email, password } = req.body;
-    const updateFields = {};
+
+    const updateFields: Partial<Iemployee> = {};
+
     if (firstname) updateFields.firstname = firstname;
     if (lastname) updateFields.lastname = lastname;
     if (employeename) updateFields.employeename = employeename;
     if (email) updateFields.email = email;
     if (password) {
-      const hashedPassword = await bcryptjs_1.default.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
       updateFields.password = hashedPassword;
     }
-    const updatedemployee = await employees_2.default.findByIdAndUpdate(
+
+    const updatedemployee = await employee.findByIdAndUpdate(
       employeeId,
       updateFields,
       {
         new: true,
       }
     );
+
     if (!updatedemployee) {
       return res.status(404).json({ message: "employee not found" });
     }
-    const employeeWithoutPassword = Object.assign(
-      Object.assign({}, updatedemployee.toObject()),
-      { password: undefined }
-    );
+
+    const employeeWithoutPassword = {
+      ...updatedemployee.toObject(),
+      password: undefined,
+    };
+
     return res
       .status(200)
       .json({
@@ -181,25 +187,25 @@ const update = async (req, res, next) => {
     next(error);
   }
 };
-exports.update = update;
-const delete1 = async (req, res, next) => {
+
+const delete1 = async (req: Request, res: Response, next: NextFunction) => {
   const employeeId = req.params.id;
   try {
-    const deletedemployee = await employees_2.default.findByIdAndDelete(
-      employeeId
-    );
+    const deletedemployee = await employee.findByIdAndDelete(employeeId);
+
     if (!deletedemployee) {
       return res.status(404).json({ message: "employee not found" });
     }
+
     return res.status(200).json({ message: "employee deleted successfully" });
   } catch (error) {
     next(error);
   }
 };
-exports.delete1 = delete1;
-const deleteAll = async (req, res, next) => {
+
+const deleteAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await employees_2.default.deleteMany({});
+    await employee.deleteMany({});
     return res
       .status(200)
       .json({ message: "All employees deleted successfully" });
@@ -207,4 +213,5 @@ const deleteAll = async (req, res, next) => {
     next(error);
   }
 };
-exports.deleteAll = deleteAll;
+
+export { signUp, signIn, single, all, update, delete1, deleteAll };
