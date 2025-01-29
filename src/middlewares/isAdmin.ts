@@ -22,16 +22,16 @@ const isAdmin = async (
       token,
       process.env.LOGIN_SECRET || "I0H1A9G2sam"
     );
-    const employee = await employee.findById(decoded._id);
-    if (!employee) {
+    const foundEmployee = await employee.findById(decoded._id);
+    if (!foundEmployee) {
       return res.status(401).json({ message: "employee not found" });
     }
-    if (employee.role !== "admin") {
+    if (foundEmployee.role !== "admin") {
       return res
         .status(403)
         .json({ message: "Unauthorized: employee is not an admin" });
     }
-    req.employee = employee;
+    req.employee = foundEmployee;
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token", error: error });

@@ -5,26 +5,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const swagger_autogen_1 = __importDefault(require("swagger-autogen"));
 const apiDoc = {
-  openapi: "3.0.0",
-  info: {
-    title: "NETPIPO BACKEND API DOCUMENTATION",
-    description: "Documentation for the Express API endpoints",
-    version: "1.0.0",
-  },
-  servers: [
-    {
-      url: "https://my-express-app-yzv8.onrender.com",
+    openapi: "3.0.0",
+    info: {
+        title: "NETPIPO BACKEND API DOCUMENTATION",
+        description: "Documentation for the Express API endpoints",
+        version: "1.0.0",
     },
-  ],
-  paths: {},
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-      },
+    servers: [
+        {
+            url: "https://my-express-app-yzv8.onrender.com",
+        },
+    ],
+    paths: {},
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+            },
+        },
     },
-  },
 };
 const outputFilePath = "./swagger_output.json";
 const endpointsFilePaths = ["../index.ts"];

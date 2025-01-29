@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const employees_1 = __importDefault(require("../models/employees"));
 require("dotenv").config();
-const isAdmin = async (req, res, next) => {
+const isemployee = async (req, res, next) => {
     var _a;
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
     if (!token) {
@@ -18,16 +18,17 @@ const isAdmin = async (req, res, next) => {
         if (!foundEmployee) {
             return res.status(401).json({ message: "employee not found" });
         }
-        if (foundEmployee.role !== "admin") {
+        if (foundEmployee.role !== "employee") {
             return res
                 .status(403)
-                .json({ message: "Unauthorized: employee is not an admin" });
+                .json({ message: "Unauthorized: employee is not a regular employee" });
         }
         req.employee = foundEmployee;
         next();
     }
     catch (error) {
+        console.error("Error in isemployee middleware:", error);
         return res.status(401).json({ message: "Invalid token", error: error });
     }
 };
-exports.default = isAdmin;
+exports.default = isemployee;

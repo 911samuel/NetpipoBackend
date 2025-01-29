@@ -10,9 +10,7 @@ import fs from "fs";
 
 require("dotenv").config();
 
-import blog from "./routes/blogs";
 import employee from "./routes/employees";
-import comment from "./routes/comments";
 
 const db = process.env.BACKEND_MONGODB_URI;
 if (!db) {
@@ -37,32 +35,11 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const uploadDir = path.join(__dirname, "../uploads/");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-app.use("/uploads", express.static(uploadDir));
-
 app.use(
   "/employees",
   employee
   /* 
 #swagger.tags = ['EMPLOYEE']
-*/
-);
-app.use(
-  "/blogs",
-  blog
-  /* 
-#swagger.tags = ['BLOG']
-*/
-);
-app.use(
-  "/comments",
-  comment
-  /* 
-#swagger.tags = ['COMMENT']
 */
 );
 

@@ -30,12 +30,12 @@ const authenticate = async (
     if (typeof decodedToken === "string") {
       return res.status(401).json({ error: "Invalid token format" });
     }
-    const employee = await employee.findById(decodedToken._id);
+    const foundEmployee = await employee.findById(decodedToken._id);
 
-    if (!employee) {
+    if (!foundEmployee) {
       return res.status(401).json({ error: "employee not found" });
     }
-    (req as AuthenticatedRequest).employee = employee;
+    (req as AuthenticatedRequest).employee = foundEmployee;
     next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid Token" });

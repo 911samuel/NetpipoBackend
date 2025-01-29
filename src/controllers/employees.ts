@@ -81,12 +81,12 @@ const all = async (req: Request, res: Response, next: NextFunction) => {
 const single = async (req: Request, res: Response, next: NextFunction) => {
   const employeeId = req.params.id;
   try {
-    const employee = await employee.findById(employeeId);
-    if (!employee) {
+    const foundEmployee = await employee.findById(employeeId);
+    if (!foundEmployee) {
       return res.status(404).json({ message: "employee not found" });
     }
 
-    const employeeWithoutPassword = { ...employee, password: undefined };
+    const employeeWithoutPassword = { ...foundEmployee, password: undefined };
 
     return res.json({ employeeWithoutPassword });
   } catch (error) {
@@ -99,20 +99,24 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
-    const employee = await employee.findOne({ email });
+    const foundEmployee = await employee.findOne({ email });
 
     if (!employee) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const isValidPassword = await bcrypt.compare(password, employee.password);
+    if (!foundEmployee) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, foundEmployee.password);
 
     if (!isValidPassword) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign(
-      { _id: employee._id },
+      { _id: foundEmployee._id },
       process.env.LOGIN_SECRET || "I0H1A9G2sam",
       { expiresIn: "1d" }
     );
@@ -122,7 +126,7 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const employeeWithoutPassword = {
-      ...employee.toObject(),
+      ...foundEmployee.toObject(),
       password: undefined,
     };
 
