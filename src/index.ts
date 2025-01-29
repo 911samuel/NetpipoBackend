@@ -14,17 +14,18 @@ import blog from "./routes/blogs";
 import user from "./routes/users";
 import comment from "./routes/comments";
 
-const db = process.env.MYBRAND_MONGODB_URI;
+const db = process.env.BACKEND_MONGODB_URI;
 if (!db) {
-  console.log("Can not read MongoDB string");
+  console.log("❌ Can not read MongoDB string");
 } else {
   mongoose
-    .connect(db)
-    .then(() => {
-      console.log("Database successfully connected");
-    })
+    .connect(db, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as mongoose.ConnectOptions)
+    .then(() => console.log("✅ Database successfully connected"))
     .catch((err: any) => {
-      console.log("Database failed to connect:", err);
+      console.log("❌ Database failed to connect:", err.message);
     });
 }
 
@@ -68,7 +69,7 @@ app.use(
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutPut));
 
 app.use("/", (req, res) => {
-  res.send("Welcome to My Brand");
+  res.send("WELCOME TO NETPIPO BACKEND");
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

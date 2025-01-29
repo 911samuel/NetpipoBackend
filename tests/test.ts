@@ -105,15 +105,21 @@ const mockUpdateComment = {
 const testingDbURI = process.env.TEST_MONGODB_URI;
 
 beforeAll(async () => {
-  if (testingDbURI) {
-    try {
-      await mongoose.connect(testingDbURI);
-    } catch (error) {
-      console.error("Error connecting to MongoDB:", error);
-    }
-  } else {
-    console.error("TEST_MONGODB_URI environment variable is not defined.");
+  if (!testingDbURI) {
+    console.error("❌ TEST_MONGODB_URI is missing in .env");
+    process.exit(1);
   }
+
+  mongoose
+    .connect(testingDbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as mongoose.ConnectOptions)
+    .then(() => console.log("✅ Test Database Connected"))
+    .catch((error) => {
+      console.error("❌ MongoDB Connection Failed:", error.message);
+      process.exit(1);
+    });
 });
 
 afterAll(async () => {
