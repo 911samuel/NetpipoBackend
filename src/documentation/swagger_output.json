@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://my-express-app-yzv8.onrender.com"
+      "url": "https://netpipobackend-gwa8.onrender.com/"
     }
   ],
   "paths": {
