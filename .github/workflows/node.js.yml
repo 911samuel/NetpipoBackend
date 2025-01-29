@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      BACKEND_MONGODB_URI: ${{ secrets.BACKEND_MONGODB_URI }}
+      MYBRAND_MONGODB_URI: ${{ secrets.MYBRAND_MONGODB_URI }}
       TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
       LOGIN_SECRET: ${{ secrets.LOGIN_SECRET }}
       cloud_name: ${{ secrets.CLOUDINARY_NAME }}
